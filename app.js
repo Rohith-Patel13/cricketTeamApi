@@ -124,7 +124,7 @@ app.post("/players/", async (requestObject, responseObject) => {
    cricket_team(player_name, jersey_number, role)
    VALUES
    ( '${playerName}',
-    '${jerseyNumber}',
+    ${jerseyNumber},
     '${role}');`;
   await dbConnectionObject.run(playersQuery);
 
@@ -139,7 +139,7 @@ app.get("/players/:playerId/", async (requestObject, responseObject) => {
   const playerIdObject = requestObject.params;
   //console.log(playerIdObject); //OUTPUT: { playerId: '1' }
   const { playerId } = playerIdObject;
-  const playerQuery = `SELECT * FROM cricket_team WHERE player_id='${playerId}';`;
+  const playerQuery = `SELECT * FROM cricket_team WHERE player_id= ${playerId};`;
   const dbResponse = await dbConnectionObject.get(playerQuery);
   const modifiedDbResponse = {
     playerId: dbResponse.player_id,
@@ -159,8 +159,8 @@ app.put("/players/:playerId/", async (requestObject, responseObject) => {
   //console.log(playerIdObject); //{ playerId: '5' }
   const { playerId } = playerIdObject;
   const playerQuery = `UPDATE  cricket_team SET
-  player_name='${playerName}',jersey_number='${jerseyNumber}',
-  role='${role}' WHERE player_id='${playerId}' ;`;
+  player_name='${playerName}',jersey_number= ${jerseyNumber},
+  role='${role}' WHERE player_id= ${playerId} ;`;
   await dbConnectionObject.run(playerQuery);
   responseObject.send("Player Details Updated");
 });
@@ -169,7 +169,7 @@ app.put("/players/:playerId/", async (requestObject, responseObject) => {
 app.delete("/players/:playerId/", async (requestObject, responseObject) => {
   const playerIdObject = requestObject.params;
   const { playerId } = playerIdObject;
-  const playerQuery = `DELETE FROM cricket_team WHERE player_id = '${playerId}';`;
+  const playerQuery = `DELETE FROM cricket_team WHERE player_id = ${playerId};`;
   await dbConnectionObject.run(playerQuery);
   responseObject.send("Player Removed");
 });
